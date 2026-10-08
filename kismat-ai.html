@@ -1,0 +1,576 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KISMAT AI — Your Future, Probably</title>
+<style>
+:root {
+ --bg:#090914;--card:#151529;--purple:#a78bfa;
+ --pink:#fb83ce;--cyan:#67e8f9;--muted:#a09dbb;
+ --line:#ffffff18;--white:#faf9ff;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;color:var(--white);
+ font-family:system-ui,-apple-system,Segoe UI,sans-serif;
+ background:radial-gradient(ellipse at 15% 0%,#382254,transparent 42%),
+ radial-gradient(ellipse at 95% 30%,#162748,transparent 35%),var(--bg);
+ min-height:100vh;overflow-x:hidden;
+}
+button,input,select{font:inherit}
+button{cursor:pointer;color:inherit}
+button:focus-visible,input:focus-visible{outline:2px solid var(--cyan)}
+header{
+ max-width:1000px;margin:auto;padding:22px 20px;
+ display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.logo{font-weight:900;letter-spacing:1px;font-size:19px}
+.logo span{color:var(--pink)}
+.logo small{display:block;font-size:10px;letter-spacing:2px;color:var(--muted)}
+.pill,.tag{border:1px solid var(--line);border-radius:30px;
+ padding:8px 12px;color:#d2c3ff;font-size:11px}
+main{max-width:820px;margin:auto;padding:38px 18px 60px}
+.hero{text-align:center}
+.eyebrow{font-size:11px;letter-spacing:3px;color:var(--cyan);font-weight:800}
+h1{font-size:clamp(42px,8vw,70px);letter-spacing:-3px;line-height:1.05;margin:18px 0}
+h1 span{background:linear-gradient(90deg,#b7a3ff,#ff9edc,#75e7f7);
+ color:transparent;background-clip:text}
+.subtitle{color:#bbb8d4;max-width:550px;margin:auto;line-height:1.7;font-size:14px}
+.search{display:flex;gap:8px;align-items:center;margin:30px auto 0;
+ padding:8px 9px 8px 15px;border:1px solid #a78bfa66;
+ background:#141427;border-radius:17px;max-width:700px;
+ box-shadow:0 0 40px #a78bfa18}
+.search input{flex:1;min-width:0;border:0;outline:0;background:transparent;
+ color:white;padding:12px 3px;font-size:14px}
+.search input::placeholder{color:#85819f}
+.btn{border:0;border-radius:11px;padding:12px 16px;
+ background:linear-gradient(110deg,#9575ff,#d276e9);font-weight:800}
+.btn:hover{filter:brightness(1.12);transform:translateY(-1px)}
+.secondary{background:#ffffff08;border:1px solid var(--line);
+ border-radius:10px;padding:10px 13px;font-size:12px}
+.section-head{display:flex;justify-content:space-between;align-items:center;
+ gap:10px;margin:29px 0 12px}
+.section-head h2{font-size:12px;letter-spacing:1.2px;margin:0}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:#ffffff07;
+ border-radius:25px;padding:10px 13px;font-size:12px;color:#e0dcef}
+.chip:hover{border-color:var(--purple);background:#a78bfa16}
+.suggestions{max-width:700px;margin:-20px auto 0;position:relative;z-index:5;
+ background:#1b1930;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.suggestion{padding:12px;cursor:pointer;font-size:13px}
+.suggestion:hover{background:#ffffff10}
+.hidden{display:none!important}
+.result{margin-top:30px;padding:23px;border:1px solid #a78bfa55;
+ background:linear-gradient(145deg,#211b3aed,#10101fed);
+ border-radius:22px;animation:appear .4s ease;box-shadow:0 20px 65px #0003}
+@keyframes appear{from{opacity:0;transform:translateY(13px)}to{opacity:1;transform:none}}
+.result-head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+#resultQuestion{font-size:clamp(21px,4vw,29px);margin:23px 0 8px}
+.result-grid{display:grid;grid-template-columns:180px 1fr;align-items:center;gap:25px}
+.gauge{height:165px;width:165px;border-radius:50%;display:grid;place-items:center;
+ position:relative;background:conic-gradient(var(--purple) 0deg,#ffffff10 0deg)}
+.gauge:before{content:"";position:absolute;inset:10px;background:#171427;border-radius:50%}
+.gauge-inner{position:relative;text-align:center}
+#percent{font-size:43px;font-weight:900;letter-spacing:-2px}
+.gauge small{display:block;font-size:10px;color:var(--muted);letter-spacing:1px}
+#verdict{font-size:20px;font-weight:900;margin-bottom:11px}
+#funny{font-size:14px;line-height:1.85;color:#e0dced;white-space:pre-line}
+.quote{margin-top:15px;padding:12px;border-left:2px solid var(--pink);
+ background:#fb83ce0b;color:#f6b6e0;font-size:12px;line-height:1.7}
+.challenge{display:block;width:100%;margin-top:17px;padding:14px;
+ border:1px solid #fb83ce70;border-radius:12px;
+ background:linear-gradient(100deg,#fb83ce1b,#a78bfa1b);
+ font-weight:900;letter-spacing:.6px}
+.challenge:hover{background:#fb83ce2a}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.note{font-size:10px;color:var(--muted);line-height:1.7;margin-top:13px}
+.panel{margin-top:28px;border:1px solid var(--line);background:#ffffff04;
+ border-radius:18px;padding:20px}
+.panel h2{font-size:16px;margin:0 0 7px}
+.panel p{font-size:12px;line-height:1.7;color:var(--muted)}
+.field{display:grid;gap:7px;margin:13px 0}
+.field label{font-size:12px;color:#d0cbe6}
+.field input,.field select{width:100%;padding:12px;background:#101020;
+ color:white;border:1px solid var(--line);border-radius:10px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+footer{text-align:center;border-top:1px solid var(--line);padding:24px;
+ font-size:11px;color:#85819f;line-height:1.8}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+ z-index:9;background:#292342;border:1px solid #a78bfa77;
+ border-radius:12px;padding:12px 16px;font-size:12px;max-width:90vw}
+@media(max-width:560px){
+ main{padding:28px 14px 45px}header{padding:17px 14px}
+ .result-grid{grid-template-columns:1fr;gap:20px}
+ .gauge{margin:auto;width:150px;height:150px}
+ .result{padding:17px}#verdict{text-align:center}
+ #funny{text-align:center}.two{grid-template-columns:1fr}
+ .search{gap:5px;padding-left:10px}
+ .btn{padding:12px;font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">🔮 KISMAT <span>AI</span><small>YOUR FUTURE, PROBABLY.</small></div>
+ <div class="pill">✦ CHAOS MODE ON</div>
+</header>
+
+<main>
+ <section class="hero">
+  <div class="eyebrow">THE UNIVERSE HAS ENTERED THE CHAT</div>
+  <h1>What are your<br><span>chances?</span></h1>
+  <p class="subtitle">Ask anything about your future. Get a probability,
+  a brutally funny verdict, and the motivation to prove this app wrong.</p>
+
+  <div class="search">
+   <span>⌕</span>
+   <input id="question" maxlength="300" autocomplete="off"
+    placeholder="Will I get a girlfriend?">
+   <button class="btn" id="predict">Predict ✦</button>
+  </div>
+  <div id="suggestions" class="suggestions hidden"></div>
+  <p class="note">Press Enter to predict · Made for entertainment, not actual fortune-telling.</p>
+ </section>
+
+ <section>
+  <div class="section-head"><h2>⚡ TRY YOUR LUCK</h2><span class="note">Tap any question</span></div>
+  <div class="chips" id="quick"></div>
+ </section>
+ <section>
+  <div class="section-head"><h2>🔥 TRENDING IN THE UNIVERSE</h2>
+   <button class="secondary" id="shuffle">Shuffle ↻</button></div>
+  <div class="chips" id="trending"></div>
+ </section>
+
+ <section id="result" class="result hidden" aria-live="polite">
+  <div class="result-head"><span class="tag">✦ YOUR COSMIC REPORT</span>
+   <span class="tag" id="type">PLAYFUL ESTIMATE</span></div>
+  <h2 id="resultQuestion"></h2>
+  <div class="result-grid">
+   <div class="gauge" id="gauge"><div class="gauge-inner">
+    <div><span id="percent">0</span><span>%</span></div>
+    <small>CHANCE-O-METER</small></div></div>
+   <div>
+    <div id="verdict"></div>
+    <div id="funny"></div>
+    <div class="quote" id="quote"></div>
+   </div>
+  </div>
+  <button class="challenge" id="prove">🔥 PROVE US WRONG</button>
+  <div class="actions">
+   <button class="btn" id="another">Try another ✦</button>
+   <button class="secondary" id="copy">Copy prediction ↗</button>
+   <button class="secondary" id="teachThis">Teach KISMAT ↓</button>
+  </div>
+  <div class="note" id="challengeNote">This is a playful estimate, not a scientifically measured probability.</div>
+ </section>
+
+ <section class="panel" id="training">
+  <h2>🧠 Teach KISMAT a new trick</h2>
+  <p>Save your own questions, probabilities and punchlines. The app remembers
+  examples in this browser and reuses close matches. This is example-based
+  learning, not neural-network training.</p>
+  <div class="field"><label for="tq">Question</label>
+   <input id="tq" maxlength="300" placeholder="Will I become a famous chef?"></div>
+  <div class="two">
+   <div class="field"><label for="tp">Probability (%)</label>
+    <input id="tp" type="number" min="0" max="100" value="40"></div>
+   <div class="field"><label for="tc">Category</label>
+    <select id="tc">
+     <option value="love">Love & relationships</option>
+     <option value="money">Money & success</option>
+     <option value="dream">Dreams & career</option>
+     <option value="celebrity">Fame & celebrities</option>
+     <option value="fun">Pure chaos</option>
+     <option value="impossible">Impossible scenario</option>
+    </select></div>
+  </div>
+  <div class="field"><label for="tr">Funny response</label>
+   <input id="tr" maxlength="1000" placeholder="Bhai, even your alarm clock believes in you."></div>
+  <button class="btn" id="save">+ Save training example</button>
+  <p id="status">Loading local examples…</p>
+  <div class="actions">
+   <button class="secondary" id="export">Export examples ↓</button>
+   <button class="secondary" id="import">Import examples ↑</button>
+   <button class="secondary" id="clear">Clear examples</button>
+  </div>
+  <input id="file" type="file" accept=".json,application/json" class="hidden">
+ </section>
+</main>
+<footer>
+ KISMAT AI · Your future, probably.<br>
+ Probabilities are playful fictional estimates, not evidence-based forecasts.
+ A 0% result is reserved for genuinely impossible scenarios, not unlikely dreams.
+</footer>
+
+<script>
+"use strict";
+
+const $=id=>document.getElementById(id);
+
+const quick=[
+ "Will I get a girlfriend?",
+ "Will I become PM of India?",
+ "Will I become rich?",
+ "Will I meet Elon Musk?",
+ "Will I become famous?",
+ "Will I go viral?"
+];
+
+const trending=[
+ "Will AI take over my job?",
+ "Will I become a millionaire?",
+ "Will my crush text first?",
+ "Will I travel the world?",
+ "Will I become a CEO?",
+ "Will I find my soulmate?",
+ "Will I become a famous YouTuber?",
+ "Will I buy my dream car?",
+ "Will I meet a celebrity?",
+ "Will my startup become a unicorn?",
+ "Will aliens visit Earth?",
+ "Will I become a billionaire?"
+];
+
+const quotes=[
+ '"Dream big. Reality will send you an invoice."',
+ '"Your future is unwritten. Your search history is not."',
+ '"Believe in yourself. Verify the statistics."',
+ '"The plot twist may require leaving the house."',
+ '"Fortune favours the bold. And occasionally the lucky."',
+ '"A dream without action is just an expensive screensaver."',
+ '"Never give up. Unless it is a pyramid scheme."'
+];
+
+const bank={
+ love:{
+  low:[
+   "Bhai, chances thode low hain. Tu single hi mar sakta hai… BUT HOPE MAT CHHOD! Cupid ka GPS kabhi-kabhi late update hota hai.",
+   "Romantic life abhi buffering pe hai. Bas loading screen ko apni permanent personality mat bana.",
+   "Tera future partner exist kar sakta hai. Ab unse milne ke liye ghar se nikalna bhi ek option hai, bhai."
+  ],
+  mid:[
+   "Possibility hai! Lekin crush ke last-seen ko stock market ki tarah track karne se relationship nahi banta.",
+   "Chance hai, bhai. Thodi social interaction, thodi confidence aur thoda luck — teenon ki attendance zaroori hai."
+  ],
+  high:[
+   "Oho! Romantic plotline ke chances promising hain. Bas har 'hey' ko wedding invitation mat samajh lena.",
+   "Love story ka potential hai! Ab main character ko apna room bhi kabhi-kabhi chhodna padega."
+  ]
+ },
+ money:{
+  low:[
+   "Bhai, billionaire banne ke chances low hain. Tera vision penthouse mein hai aur budget abhi ground floor pe.",
+   "Financial freedom possible hai, par teri shopping cart ko bhi apni freedom chahiye.",
+   "Sapna bada hai! Ab income, skills aur consistency ko bhi group chat mein add kar."
+  ],
+  mid:[
+   "Rich banne ka chance hai. Lekin 'manifesting' ko salary slip samajhne ki galti mat kar.",
+   "Plot twist ho sakta hai! Skills aur smart decisions ko bhi casting mein le."
+  ],
+  high:[
+   "Money arc looking promising! Bas paisa aate hi lifestyle ko rocket launch mat kar dena.",
+   "Future mein paisa aa sakta hai. Bank balance ko abhi se billionaire mat bula."
+  ]
+ },
+ dream:{
+  low:[
+   "Dream bada hai, odds chhote. Impossible nahi — lekin mehnat ke bina universe bhi seen-zoned kar dega.",
+   "Bhai, vision premium hai. Execution ka free trial abhi tak activate nahi hua."
+  ],
+  mid:[
+   "Chance hai! Tere future ka director tu hai, par screenplay ke saath action scenes bhi chahiye.",
+   "Potential detected. Ab consistency ko guest appearance se main character banana padega."
+  ],
+  high:[
+   "Main-character energy detected! Bas montage ke baad real work bhi karna hota hai.",
+   "Oho, chances promising hain. Universe ne door khola toh andar chalke bhi jaana."
+  ]
+ },
+ celebrity:{
+  low:[
+   "Celebrity se milne ke chances low hain. Universe ne tera fan letter abhi tak forwarding department ko diya hai.",
+   "Possible hai, bhai. Lekin sirf unka naam search karne se Google Meet invite nahi aata."
+  ],
+  mid:[
+   "Meeting possible hai! Bas celebrity ko bhi calendar invite accept karna padega.",
+   "Chance hai. Ek event ticket aur thoda luck tera multiverse crossover kara sakte hain."
+  ],
+  high:[
+   "Celebrity encounter loading! Bas selfie lene se pehle unki personal space ka update install kar lena.",
+   "Oho! Potential crossover episode. Autograph ke liye pen rakhna, delusion ke liye toh already hai."
+  ]
+ },
+ fun:{
+  low:[
+   "Odds low hain, bhai. Universe ne tera proposal dekha, eyebrow raise ki aur chai peene chala gaya.",
+   "Abhi chances weak hain. Lekin impossible aur unlikely mein farak hota hai — prove us wrong."
+  ],
+  mid:[
+   "50/50 energy! Ya toh legendary story banegi ya legendary group-chat material.",
+   "Universe ne coin toss kiya. Coin abhi tak hawa mein hai."
+  ],
+  high:[
+   "The plot is plotting! Bas overconfidence ko co-writer mat bana.",
+   "Chances mast lag rahe hain. Universe ne trailer drop kiya hai, full movie abhi baaki hai."
+  ]
+ }
+};
+
+function read(key,fallback){
+ try{return JSON.parse(localStorage.getItem(key))??fallback}
+ catch{return fallback}
+}
+function save(key,data){
+ try{localStorage.setItem(key,JSON.stringify(data));return true}
+ catch{toast("Browser storage unavailable or full.");return false}
+}
+let examples=read("kismat_v2_examples",[]);
+let feedback=read("kismat_v2_feedback",[]);
+let current=null;
+let toastTimer;
+
+function toast(message){
+ document.querySelector(".toast")?.remove();
+ clearTimeout(toastTimer);
+ const node=document.createElement("div");
+ node.className="toast";
+ node.textContent=message;
+ document.body.appendChild(node);
+ toastTimer=setTimeout(()=>node.remove(),2600);
+}
+
+function words(s){
+ const stop=new Set(["will","would","could","should","the","and","for","from","that","this","with","have","has","get","got","become","your","you","are","was","what","when","where","how","much","many","some","any","into","can","not"]);
+ return s.toLowerCase().replace(/[^a-z0-9\s]/g," ").split(/\s+/)
+ .filter(w=>w.length>2&&!stop.has(w));
+}
+function similarity(a,b){
+ const A=new Set(words(a)),B=new Set(words(b));
+ if(!A.size||!B.size)return 0;
+ return [...A].filter(w=>B.has(w)).length/
+ new Set([...A,...B]).size;
+}
+function matchExample(q){
+ let best=null,score=0;
+ for(const x of examples){
+  const s=similarity(q,x.question);
+  if(s>score){best=x;score=s}
+ }
+ return score>=.45?best:null;
+}
+function category(q){
+ const s=q.toLowerCase();
+ if(/\b(girlfriend|boyfriend|crush|date|dating|soulmate|marry|marriage|love|partner|relationship)\b/.test(s))return "love";
+ if(/\b(rich|millionaire|billionaire|money|wealth|salary|earn|crorepati|business|startup|ceo|job|career|successful)\b/.test(s))return "money";
+ if(/\b(elon musk|celebrity|famous|viral|followers|youtuber|influencer|actor|actress|singer)\b/.test(s))return "celebrity";
+ if(/\b(pm of india|prime minister|president|astronaut|scientist|chef|doctor|engineer|pilot|dream job|dream car|dream house|travel the world)\b/.test(s))return "dream";
+ return "fun";
+}
+function impossible(q){
+ const s=q.toLowerCase();
+ if(/\b(become|turn into|transform into)\s+(a\s+)?(literal\s+)?(black hole|planet|the sun)\b/.test(s))
+  return "Human bodies cannot literally transform into astronomical objects. Sorry bhai, physics ne request reject kar di. Tu chahe toh apne unread messages ko black hole bana sakta hai. 💀";
+ if(/\b(go back in time)\b/.test(s)&&/\b(yesterday|last year|my childhood|the past)\b/.test(s))
+  return "There is no verified technology that lets a person travel into their own past. Time-travel movies ne expectations ka EMI chadha diya hai.";
+ if(/\b(become immortal|live forever)\b/.test(s))
+  return "Biological immortality for humans is not currently achievable. Sorry bhai, universe ne unlimited subscription launch nahi ki.";
+ return null;
+}
+function baseline(q,c){
+ const s=q.toLowerCase();
+ if(/\b(pm of india|prime minister of india)\b/.test(s))return 4;
+ if(/\b(meet elon musk)\b/.test(s))return 18;
+ if(/\b(girlfriend|boyfriend|soulmate|relationship)\b/.test(s))return 48;
+ if(/\b(become rich|become a millionaire|millionaire)\b/.test(s))return 20;
+ if(/\b(go viral|become famous)\b/.test(s))return 22;
+ if(/\b(travel the world)\b/.test(s))return 50;
+ if(/\b(aliens visit earth)\b/.test(s))return 12;
+ if(/\b(startup become a unicorn)\b/.test(s))return 5;
+ return ({love:48,money:25,dream:32,celebrity:20,fun:42})[c]??42;
+}
+function verdict(p){
+ if(p===0)return "0% — NOT POSSIBLE.";
+ if(p<10)return "Almost impossible. But hey…";
+ if(p<25)return "Long shot. Legendary if it happens.";
+ if(p<40)return "The odds are not on your side.";
+ if(p<60)return "50/50 energy. Who knows?";
+ if(p<75)return "Looking promising!";
+ if(p<90)return "The plot is plotting.";
+ return "MAIN CHARACTER ENERGY!";
+}
+function generate(q){
+ const imposs=impossible(q);
+ if(imposs)return {p:0,category:"fun",joke:imposs,type:"Logical limitation",quote:'"Even plot twists have limits."'};
+
+ const learned=matchExample(q);
+ if(learned){
+  if(learned.category==="impossible"){
+   return {p:0,category:"fun",joke:learned.response,type:"Locally learned rule",quote:'"The universe has boundaries."'};
+  }
+  return {p:Number(learned.p),category:learned.category,
+   joke:learned.response,type:"Local example match",quote:random(quotes)};
+ }
+
+ const c=category(q);
+ let hash=0;
+ for(let i=0;i<q.length;i++)hash=(hash*31+q.charCodeAt(i))|0;
+ const p=Math.max(1,Math.min(99,baseline(q,c)+Math.abs(hash%17)-8));
+ const band=p<25?"low":p<60?"mid":"high";
+ return {p,category:c,joke:random(bank[c][band]),type:"Playful estimate",quote:random(quotes)};
+}
+function random(arr){return arr[Math.floor(Math.random()*arr.length)]}
+
+function renderChips(id,arr){
+ const el=$(id);el.replaceChildren();
+ arr.forEach(q=>{
+  const b=document.createElement("button");
+  b.className="chip";b.textContent=q;
+  b.addEventListener("click",()=>predict(q));
+  el.appendChild(b);
+ });
+}
+function shuffle(){
+ renderChips("trending",[...trending].sort(()=>Math.random()-.5).slice(0,8));
+}
+function animate(p){
+ const start=performance.now(),duration=1000;
+ function frame(now){
+  const t=Math.min(1,(now-start)/duration);
+  const n=Math.round(p*(1-Math.pow(1-t,3)));
+  $("percent").textContent=n;
+  $("gauge").style.background=
+   `conic-gradient(from -90deg,var(--purple) 0deg,var(--pink) ${n*3.6}deg,#ffffff10 ${n*3.6}deg 360deg)`;
+  if(t<1)requestAnimationFrame(frame);
+ }
+ requestAnimationFrame(frame);
+}
+function predict(q){
+ q=String(q||"").trim();
+ if(!q)return toast("Bhai, pehle question toh pooch! 🔮");
+ if(q.length>300)return toast("Question 300 characters se chhota rakho.");
+
+ const r=generate(q);
+ current={q,...r};
+ $("resultQuestion").textContent=q;
+ $("verdict").textContent=verdict(r.p);
+ $("funny").textContent=r.joke;
+ $("quote").textContent=r.quote;
+ $("type").textContent=r.type;
+ $("challengeNote").textContent=r.p===0
+ ? "This is a genuinely impossible scenario under known science or logic. Change the conditions, or prove us wrong with credible evidence."
+ : "Entertainment estimate only — not a scientific forecast. Real outcomes depend on circumstances.";
+ $("result").classList.remove("hidden");
+ animate(r.p);
+ $("suggestions").classList.add("hidden");
+ $("result").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+$("predict").onclick=()=>predict($("question").value);
+$("question").onkeydown=e=>{
+ if(e.key==="Enter"){e.preventDefault();predict($("question").value)}
+ if(e.key==="Escape")$("suggestions").classList.add("hidden");
+};
+$("another").onclick=()=>{
+ $("question").value="";$("question").focus();
+ $("result").classList.add("hidden");
+};
+$("shuffle").onclick=shuffle;
+
+$("question").addEventListener("input",()=>{
+ const q=$("question").value.trim().toLowerCase();
+ const options=[...new Set([...quick,...trending,...examples.map(x=>x.question)])]
+ .filter(x=>q&&x.toLowerCase().includes(q)).slice(0,5);
+ const box=$("suggestions");box.replaceChildren();
+ options.forEach(q=>{
+  const d=document.createElement("div");d.className="suggestion";
+  d.textContent="⌕ "+q;
+  d.onclick=()=>{$("question").value=q;predict(q)};
+  box.appendChild(d);
+ });
+ box.classList.toggle("hidden",!options.length);
+});
+
+$("prove").onclick=()=>{
+ if(!current)return;
+ if(current.p===0){
+  $("challengeNote").textContent=
+   "Challenge accepted! Show credible evidence that changes the scientific or logical conditions. An impossible scenario may become possible if the question changes.";
+ }else{
+  $("challengeNote").textContent=
+   `Challenge issued for "${current.q}". This is not a deadline or a real-world probability test — go chase your goal, and bring back your success story!`;
+ }
+ toast(current.p===0?"Bring evidence, not just confidence. 🔬":"GO PROVE THIS APP WRONG. 🔥");
+};
+
+$("copy").onclick=async()=>{
+ if(!current)return;
+ const text=`KISMAT AI 🔮\n${current.q}\nChance: ${current.p}%\n${verdict(current.p)}\n${current.joke}\nEntertainment only.`;
+ try{await navigator.clipboard.writeText(text);toast("Prediction copied!")}
+ catch{toast("Clipboard unavailable in this browser.")}
+};
+
+$("teachThis").onclick=()=>{
+ if(!current)return;
+ $("tq").value=current.q;
+ $("tp").value=current.p;
+ $("tc").value=current.category;
+ $("tr").value=current.joke;
+ $("training").scrollIntoView({behavior:"smooth"});
+};
+
+$("save").onclick=()=>{
+ const q=$("tq").value.trim(),p=Number($("tp").value);
+ const response=$("tr").value.trim(),c=$("tc").value;
+ if(!q||!response)return toast("Question aur funny response dono daal, bhai.");
+ if(q.length>300||response.length>1000)return toast("Text too long.");
+ if(!Number.isFinite(p)||p<0||p>100)return toast("Probability 0–100 ke beech rakho.");
+
+ const item={question:q,p,category:c,response};
+ const i=examples.findIndex(x=>x.question.toLowerCase()===q.toLowerCase());
+ if(i>=0)examples[i]=item;else examples.unshift(item);
+ examples=examples.slice(0,300);
+ if(save("kismat_v2_examples",examples)){
+  updateStatus();toast("Example saved! Ask a similar question to test it. 🧠");
+ }
+};
+function updateStatus(){
+ $("status").textContent=`${examples.length}/300 local examples saved · ${feedback.length} feedback entries.`;
+}
+$("export").onclick=()=>{
+ const blob=new Blob([JSON.stringify({version:2,examples},null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download="kismat-training.json";a.click();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+$("import").onclick=()=>$("file").click();
+$("file").onchange=async e=>{
+ const f=e.target.files[0];if(!f)return;
+ try{
+  if(f.size>2000000)throw Error("File too large.");
+  const data=JSON.parse(await f.text());
+  const list=Array.isArray(data)?data:data.examples;
+  if(!Array.isArray(list))throw Error("Invalid training file.");
+  examples=list.filter(x=>x&&typeof x.question==="string"&&
+   typeof x.response==="string"&&Number.isFinite(Number(x.p))&&
+   Number(x.p)>=0&&Number(x.p)<=100&&
+   ["love","money","dream","celebrity","fun","impossible"].includes(x.category))
+   .slice(0,300).map(x=>({question:x.question.slice(0,300),
+    response:x.response.slice(0,1000),p:Number(x.p),category:x.category}));
+  save("kismat_v2_examples",examples);updateStatus();
+  toast(`Imported ${examples.length} examples.`);
+ }catch(err){toast("Import failed: "+err.message)}
+ e.target.value="";
+};
+$("clear").onclick=()=>{
+ if(!confirm("Delete all local examples?"))return;
+ examples=[];save("kismat_v2_examples",examples);updateStatus();
+ toast("Local examples cleared.");
+};
+
+renderChips("quick",quick);shuffle();updateStatus();
+</script>
+</body>
+</html>
